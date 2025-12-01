@@ -1,17 +1,20 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 
+// แก้ไข Type ของ params เป็น Promise
 export async function DELETE(
     request: Request,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     try {
         const supabase = await createClient();
+        // เพิ่มการ await params
+        const { id } = await params;
 
         const { error } = await supabase
             .from('licenses')
             .delete()
-            .eq('id', params.id);
+            .eq('id', id); // ใช้ id ที่ await มาแล้ว
 
         if (error) {
             return NextResponse.json({ error: error.message }, { status: 500 });
@@ -26,12 +29,15 @@ export async function DELETE(
     }
 }
 
+// แก้ไข Type ของ params เป็น Promise
 export async function GET(
     request: Request,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     try {
         const supabase = await createClient();
+        // เพิ่มการ await params
+        const { id } = await params;
 
         const { data: license, error } = await supabase
             .from('licenses')
@@ -41,7 +47,7 @@ export async function GET(
                 tags (id, name),
                 scopes (id, standard_code, description)
             `)
-            .eq('id', params.id)
+            .eq('id', id) // ใช้ id ที่ await มาแล้ว
             .single();
 
         if (error) {
@@ -77,18 +83,22 @@ export async function GET(
     }
 }
 
+// แก้ไข Type ของ params เป็น Promise
 export async function PUT(
     request: Request,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     try {
         const supabase = await createClient();
+        // เพิ่มการ await params
+        const { id } = await params;
+
         const body = await request.json();
 
         const { error } = await supabase
             .from('licenses')
             .update(body)
-            .eq('id', params.id);
+            .eq('id', id); // ใช้ id ที่ await มาแล้ว
 
         if (error) {
             return NextResponse.json({ error: error.message }, { status: 500 });

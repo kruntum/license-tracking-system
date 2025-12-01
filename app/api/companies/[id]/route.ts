@@ -3,17 +3,21 @@ import { NextResponse } from 'next/server';
 
 export const dynamic = 'force-dynamic';
 
+// แก้ไข Type ของ params ให้เป็น Promise
 export async function PUT(
     request: Request,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     const supabase = await createClient();
     try {
+        // เพิ่มบรรทัดนี้เพื่อ await ค่า params
+        const { id } = await params;
+
         const body = await request.json();
         const { error } = await supabase
             .from('companies')
             .update(body)
-            .eq('id', params.id);
+            .eq('id', id); // ใช้ id ที่ await มาแล้ว
 
         if (error) throw error;
         return NextResponse.json({ success: true });
@@ -23,16 +27,20 @@ export async function PUT(
     }
 }
 
+// แก้ไข Type ของ params ให้เป็น Promise
 export async function DELETE(
     request: Request,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     const supabase = await createClient();
     try {
+        // เพิ่มบรรทัดนี้เพื่อ await ค่า params
+        const { id } = await params;
+
         const { error } = await supabase
             .from('companies')
             .delete()
-            .eq('id', params.id);
+            .eq('id', id); // ใช้ id ที่ await มาแล้ว
 
         if (error) throw error;
         return NextResponse.json({ success: true });

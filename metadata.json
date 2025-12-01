@@ -1,0 +1,5 @@
+{
+  "name": "LicenseGuard - License Tracking System",
+  "description": "ระบบติดตามและแจ้งเตือนวันหมดอายุใบอนุญาต (License Tracking) พร้อมแนะนำสถาปัตยกรรมสำหรับระบบแจ้งเตือนผ่าน LINE ฟรี",
+  "requestFramePermissions": []
+}

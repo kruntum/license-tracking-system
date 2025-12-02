@@ -67,13 +67,53 @@ export default function Home() {
         });
     }, [allData, filter]);
 
-    const handleSimulateNotification = () => {
+    const handleSendLineNotification = async () => {
         setNotificationStatus('sending');
-        setTimeout(() => {
-            setNotificationStatus('sent');
-            setTimeout(() => setNotificationStatus('idle'), 3000);
-            alert(`[จำลอง] ส่งแจ้งเตือนไปยัง LINE OA เรียบร้อยแล้ว!\n\nรายการแจ้งเตือน:\n- หมดอายุ: ${stats.expired} รายการ\n- ใกล้หมด: ${stats.warning} รายการ`);
-        }, 1500);
+
+        // Filter licenses that need notification (1-90 days remaining)
+        const licensesToNotify = allData.filter(
+            (d) => d.daysRemaining >= 1 && d.daysRemaining <= 90
+        );
+
+        if (licensesToNotify.length === 0) {
+            alert('ไม่มีใบอนุญาตที่ต้องแจ้งเตือนในขณะนี้');
+            setNotificationStatus('idle');
+            return;
+        }
+
+        try {
+            const response = await fetch('/api/notify/line', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    licenses: licensesToNotify,
+                }),
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                setNotificationStatus('sent');
+                alert(
+                    `✅ ส่งการแจ้งเตือนสำเร็จ!\n\n` +
+                    `ใบอนุญาต: ${data.licensesNotified} รายการ\n` +
+                    `ข้อความที่ส่ง: ${data.messagesSent} ข้อความ\n` +
+                    `โควต้าคงเหลือ: ${data.quotaRemaining}/300\n\n` +
+                    (data.quotaWarning ? '⚠️ ใกล้ถึงโควต้าแล้ว!' : '')
+                );
+                setTimeout(() => setNotificationStatus('idle'), 3000);
+            } else {
+                if (data.error === 'quota_exceeded') {
+                    throw new Error(
+                        `เกินโควต้า 300 ข้อความ/เดือน\nใช้ไปแล้ว: ${data.quotaUsed}/300`
+                    );
+                }
+                throw new Error(data.error || 'Failed to send notification');
+            }
+        } catch (error: any) {
+            setNotificationStatus('idle');
+            alert(`❌ เกิดข้อผิดพลาด:\n${error.message}`);
+        }
     };
 
     return (
@@ -109,7 +149,7 @@ export default function Home() {
                                 </Button>
                             )}
                             <Button
-                                onClick={handleSimulateNotification}
+                                onClick={handleSendLineNotification}
                                 disabled={notificationStatus !== 'idle'}
                                 className="bg-[#00B900] hover:bg-[#009900] text-white"
                             >

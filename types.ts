@@ -32,7 +32,7 @@ export interface Scope {
 
 // Updated License Interface
 export interface License {
-  status: string;
+  status?: string;
   id: string;
   registration_no: string;
   company_id: string;
@@ -62,7 +62,7 @@ export interface ComputedLicenseData {
   validUntil: string;
   daysRemaining: number;
   computedStatus: LicenseStatus;
-  status: string;
+  status?: string;
   // Raw IDs for editing
   companyId?: string;
   tagId?: string;

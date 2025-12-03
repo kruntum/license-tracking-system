@@ -76,7 +76,7 @@ export const processLicenseData = (data: License[]): ComputedLicenseData[] => {
       tag: item.tags?.name || '-',
       standardScope: item.scopes?.standard_code || '-',
       criteriaScope: item.scopes?.description || '-',
-
+      status: item.status?.toString() || '-',
       certificationAuthority: item.certification_authority || '-',
       effectiveDate: item.effective_date || '',
       validUntil: item.valid_until,

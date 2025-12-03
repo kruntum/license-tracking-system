@@ -216,7 +216,7 @@ export default function LandingPage() {
                     <div className="container px-4 sm:px-8">
                         <div className="relative rounded-3xl overflow-hidden bg-primary px-6 py-16 sm:px-16 sm:py-24 text-center shadow-2xl">
                             <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-10" />
-                            <div className="relative z-10 max-w-2xl mx-auto space-y-8">
+                            <div className="relative z-10 max-w-4xl mx-auto space-y-8">
                                 <h2 className="text-3xl sm:text-4xl font-bold text-primary-foreground">
                                     พร้อมยกระดับการจัดการใบอนุญาตหรือยัง?
                                 </h2>

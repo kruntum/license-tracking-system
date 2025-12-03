@@ -145,10 +145,11 @@ export default function DashboardPage() {
                                 <ListFilter size={20} className="sm:w-6 sm:h-6" />
                             </div>
                             <div className="min-w-0">
-                                <h1 className="text-sm sm:text-xl font-bold text-foreground truncate">
-                                    <span className="hidden sm:inline">License Tracking System</span>
-                                    <span className="sm:hidden">License Tracker</span>
+                                <h1 className="text-sm sm:text-xl font-bold text-foreground truncate tracking-tight">
+                                    <span className="hidden sm:inline">LicenseGuard</span>
+                                    <span className="sm:hidden">LicenseGuard</span>
                                 </h1>
+
                                 <p className="text-[10px] sm:text-xs text-muted-foreground hidden sm:block">ระบบติดตามใบอนุญาต</p>
                             </div>
                         </div>
